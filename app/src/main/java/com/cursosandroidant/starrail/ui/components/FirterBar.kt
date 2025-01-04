@@ -317,6 +317,12 @@ fun <T : ConNombre> FiltroBar(name: String, lista: List<T>): List<T> {
                         showPopup = false
                     }) {
                         Text("Filtrar")
+                        Button(onClick = {
+                            Filtrado = lista
+                            showPopup = false
+                        }) {
+                            Text("Clean")
+                        }
                     }
                 }
             }
