@@ -109,7 +109,7 @@ class MaterialesScreen : Screen {
                 items(materialFiltrados.chunked(3)) { materiales ->
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth() // Esto asegura que el Row ocupe todo el ancho disponible
+                            .fillMaxWidth()
                             .padding(horizontal = 6.dp) // Espacio entre las tarjetas
                     ) {
                         materiales.forEachIndexed { index, item ->

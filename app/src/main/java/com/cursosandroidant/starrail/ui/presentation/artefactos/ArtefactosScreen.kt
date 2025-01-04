@@ -113,7 +113,7 @@ class ArtefactosScreen() : Screen {
                 items(artefactosFiltrados.chunked(3)) { personaje ->
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth() // Esto asegura que el Row ocupe todo el ancho disponible
+                            .fillMaxWidth()
                             .padding(horizontal = 6.dp) // Espacio entre las tarjetas
                     ) {
                         personaje.forEachIndexed { index, item ->
