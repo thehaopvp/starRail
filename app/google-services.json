@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "289910410825",
+    "project_id": "starrail-85be5",
+    "storage_bucket": "starrail-85be5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289910410825:android:aa020136caead1daa1b998",
+        "android_client_info": {
+          "package_name": "com.cursosandroidant.starrail"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1hs8AG4i2s7OpEVtsjVczKH6RxR8b9s4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
