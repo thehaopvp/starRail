@@ -316,7 +316,7 @@ fun <T : ConNombre> FiltroBar(name: String, lista: List<T>): List<T> {
                         aplicarFiltro()
                         showPopup = false
                     }) {
-                        Text("hola")
+                        Text("Filtro")
                     }
                 }
             }
