@@ -1,6 +1,5 @@
 package com.cursosandroidant.starrail.domain.usecase
 
-import com.cursosandroidant.starrail.data.apiClient.GetAllPersonajesImgImpl
 import com.cursosandroidant.starrail.data.model.Personaje
 import com.cursosandroidant.starrail.domain.repositories.GetAllPersonajesImgRep
 import com.cursosandroidant.starrail.domain.repositories.GetAllPersonajesRep

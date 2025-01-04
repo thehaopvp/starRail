@@ -1,11 +1,8 @@
 package com.cursosandroidant.starrail.domain.usecase
 
 import com.cursosandroidant.starrail.data.model.Cono
-import com.cursosandroidant.starrail.data.model.Personaje
 import com.cursosandroidant.starrail.domain.repositories.GetAllConosImgRep
 import com.cursosandroidant.starrail.domain.repositories.GetAllConosRep
-import com.cursosandroidant.starrail.domain.repositories.GetAllPersonajesImgRep
-import com.cursosandroidant.starrail.domain.repositories.GetAllPersonajesRep
 
 class GetAllConosUseCase(private val getAllConosRep: GetAllConosRep) {
 

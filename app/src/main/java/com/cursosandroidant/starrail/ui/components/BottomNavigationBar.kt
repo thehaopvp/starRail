@@ -17,12 +17,10 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-
 import com.cursosandroidant.starrail.ui.presentation.artefactos.ArtefactosScreen
 import com.cursosandroidant.starrail.ui.presentation.conos.ConosScreen
 import com.cursosandroidant.starrail.ui.presentation.materiales.MaterialesScreen
 import com.cursosandroidant.starrail.ui.presentation.personaje.PersonajeScreen
-import com.google.gson.Gson
 
 
 sealed class BottomNavigationStar(

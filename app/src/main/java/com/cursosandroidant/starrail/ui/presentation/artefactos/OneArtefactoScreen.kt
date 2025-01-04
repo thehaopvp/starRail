@@ -29,7 +29,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
@@ -37,8 +36,6 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import coil.compose.rememberImagePainter
 import com.cursosandroidant.starrail.data.model.Artefacto
-import com.cursosandroidant.starrail.data.model.Cono
-import com.cursosandroidant.starrail.data.model.Personaje
 import com.cursosandroidant.starrail.ui.components.BottomNavigationBar
 import com.google.gson.Gson
 

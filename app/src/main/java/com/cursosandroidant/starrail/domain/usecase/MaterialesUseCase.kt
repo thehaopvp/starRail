@@ -4,8 +4,6 @@ import com.cursosandroidant.starrail.data.model.Material
 import com.cursosandroidant.starrail.data.model.Personaje
 import com.cursosandroidant.starrail.domain.repositories.GetAllMaterialesImgRep
 import com.cursosandroidant.starrail.domain.repositories.GetAllMaterialesRep
-import com.cursosandroidant.starrail.domain.repositories.GetAllPersonajesImgRep
-import com.cursosandroidant.starrail.domain.repositories.GetAllPersonajesRep
 import com.cursosandroidant.starrail.domain.repositories.GetCharactersUsingMaterialRep
 
 class GetAllMaterialesUseCase(private val getAllMaterialesRep: GetAllMaterialesRep) {

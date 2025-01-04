@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.cursosandroidant.starrail.data.model.Artefacto
 import com.cursosandroidant.starrail.domain.usecase.GetAllArtefactoImgUseCase
 import com.cursosandroidant.starrail.domain.usecase.GetAllArtefactoUseCase
-import com.cursosandroidant.starrail.domain.usecase.GetAllPersonajesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -45,10 +44,8 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import coil.compose.rememberImagePainter
 import com.cursosandroidant.starrail.data.model.Cono
-import com.cursosandroidant.starrail.data.model.Personaje
 import com.cursosandroidant.starrail.ui.components.BottomNavigationBar
 import com.cursosandroidant.starrail.ui.components.FiltroBar
-import com.cursosandroidant.starrail.ui.presentation.personaje.OneCharacterScreen
 import com.google.gson.Gson
 import org.koin.androidx.compose.koinViewModel
 

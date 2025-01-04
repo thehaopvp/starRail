@@ -26,7 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,7 +44,6 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import coil.compose.rememberImagePainter
 import com.cursosandroidant.starrail.data.model.Artefacto
-import com.cursosandroidant.starrail.data.model.Personaje
 import com.cursosandroidant.starrail.ui.components.BottomNavigationBar
 import com.cursosandroidant.starrail.ui.components.FiltroBar
 import com.google.gson.Gson

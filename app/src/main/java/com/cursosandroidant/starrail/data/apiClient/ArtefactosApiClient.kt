@@ -5,7 +5,6 @@ import com.cursosandroidant.starrail.data.model.Artefacto
 import com.cursosandroidant.starrail.data.network.FirebaseDbInstance
 import com.cursosandroidant.starrail.domain.repositories.GetAllArtefactoImgRep
 import com.cursosandroidant.starrail.domain.repositories.GetAllArtefactoRep
-import com.cursosandroidant.starrail.domain.repositories.GetAllMaterialesRep
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers

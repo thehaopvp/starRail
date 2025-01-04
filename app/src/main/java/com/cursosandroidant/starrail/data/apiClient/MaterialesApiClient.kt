@@ -6,7 +6,6 @@ import com.cursosandroidant.starrail.data.model.Personaje
 import com.cursosandroidant.starrail.data.network.FirebaseDbInstance
 import com.cursosandroidant.starrail.domain.repositories.GetAllMaterialesImgRep
 import com.cursosandroidant.starrail.domain.repositories.GetAllMaterialesRep
-import com.cursosandroidant.starrail.domain.repositories.GetAllPersonajesRep
 import com.cursosandroidant.starrail.domain.repositories.GetCharactersUsingMaterialRep
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.storage.FirebaseStorage

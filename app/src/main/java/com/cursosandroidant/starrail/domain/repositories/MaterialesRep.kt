@@ -1,6 +1,5 @@
 package com.cursosandroidant.starrail.domain.repositories
 
-import com.cursosandroidant.starrail.data.model.Artefacto
 import com.cursosandroidant.starrail.data.model.Material
 import com.cursosandroidant.starrail.data.model.Personaje
 
