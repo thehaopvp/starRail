@@ -3,7 +3,9 @@ package com.cursosandroidant.starrail.ui.presentation.personaje
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -22,7 +24,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,8 +40,12 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import coil.compose.rememberImagePainter
+import com.cursosandroidant.starrail.data.model.Habilidad
+import com.cursosandroidant.starrail.data.model.Habilidades
+import com.cursosandroidant.starrail.data.model.Mejora
 import com.cursosandroidant.starrail.data.model.Personaje
 import com.cursosandroidant.starrail.ui.components.BottomNavigationBar
+import com.cursosandroidant.starrail.ui.components.CustomSlider
 import com.google.gson.Gson
 
 class OneCharacterScreen(private val personajeJson: String) : Screen {
@@ -58,6 +67,7 @@ class OneCharacterScreen(private val personajeJson: String) : Screen {
         )
     }
 
+
     @SuppressLint("SuspiciousIndentation")
     @Composable
     fun CurrencyScreen(
@@ -66,6 +76,9 @@ class OneCharacterScreen(private val personajeJson: String) : Screen {
     ) {
         val starCount = personaje.estrella
         val starText = "★".repeat(starCount)
+        var sliderValue by remember { mutableStateOf(0f) }
+        val expandedStateEidolon = remember { mutableStateOf(false) }
+        val expandedStateHabilidad = remember { mutableStateOf(false) }
 
         LazyColumn(
             modifier = Modifier
@@ -78,7 +91,8 @@ class OneCharacterScreen(private val personajeJson: String) : Screen {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(350.dp),
+                        .padding(start = 10.dp, end = 10.dp)
+                        .height(350.dp).background(color = Color.Gray),
                     shape = RoundedCornerShape(16.dp),
                 ) {
                     Column(
@@ -230,47 +244,234 @@ class OneCharacterScreen(private val personajeJson: String) : Screen {
                         }
 
 
-
-
                     }
                 }
+
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = "Eidolon:  ",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                personaje.eidolon?.forEach { texto ->
-                    Card(
+
+
+                CustomSlider(personaje.ascension)
+
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 10.dp, end = 10.dp) // Rellenar con espacio
+                        .background(color = Color.Gray, shape = RoundedCornerShape(16.dp)) // Fondo gris y esquinas redondeadas
+                        .padding(10.dp).clickable {
+                            expandedStateEidolon.value = !expandedStateEidolon.value
+                        } // Añadir un poco de relleno al contenido dentro del Box
+                ) {
+                    Text(
+                        text = "Eidolones",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 4.dp),
-                        shape = RoundedCornerShape(8.dp), // Redondear cada tarjeta
-                    ) {
+                            .align(Alignment.Center).padding(start = 10.dp, end = 10.dp) // Alinear al centro
+                            .clickable {
+                                expandedStateEidolon.value = !expandedStateEidolon.value
+                            } // Hacer clic sobre el texto para mostrar u ocultar los elementos
+                    )
+                }
 
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
+                Spacer(modifier = Modifier.height(10.dp))
+
+
+
+
+
+                if (expandedStateEidolon.value) {
+                    personaje.eidolon?.forEach { texto ->
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 10.dp, end = 10.dp)
+                                .padding(vertical = 4.dp),
+                            shape = RoundedCornerShape(8.dp) // Redondear cada tarjeta
                         ) {
-                            Text(
-                                text = "Eidolon:  ",
-                                modifier = Modifier.padding(16.dp),
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = Color.Black
-                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                            ) {
 
-                            Text(
-                                text = texto,
-                                modifier = Modifier.padding(16.dp),
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = Color.Black
-                            )
+                                Text(
+                                    text = "Eidolon:  ",
+                                    modifier = Modifier.padding(16.dp),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = Color.Black
+                                )
+
+                                Text(
+                                    text = texto,
+                                    modifier = Modifier.padding(16.dp),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = Color.Black
+                                )
+                            }
                         }
                     }
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 10.dp, end = 10.dp) // Rellenar con espacio
+                        .background(color = Color.Gray, shape = RoundedCornerShape(16.dp)) // Fondo gris y esquinas redondeadas
+                        .padding(10.dp).clickable {
+                            expandedStateHabilidad.value = !expandedStateHabilidad.value
+                        }// Añadir un poco de relleno al contenido dentro del Box
+                ) {
+                    Text(
+                        text = "Habilidades",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .align(Alignment.Center) // Alinear al centro
+                            .clickable {
+                                expandedStateHabilidad.value = !expandedStateHabilidad.value
+                            } // Hacer clic sobre el texto para mostrar u ocultar los elementos
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                if (expandedStateHabilidad.value) {
+                    Habilidades(personaje.habilidades)
+                }
+
             }
 
         }
+
+
     }
 }
+
+
+@Composable
+fun Habilidades(habilidad: Habilidades?) {
+
+    imprimirHabilidad(habilidad?.atq_basico, "Atq_basico")
+    imprimirHabilidad(habilidad?.habilidad_basica, "Habilidad_basica")
+    imprimirHabilidad(habilidad?.habilidad_definitiva, "Habilidad_definitiva")
+    imprimirHabilidad(habilidad?.talento, "Talento",habilidad?.mejoras)
+    imprimirHabilidad(habilidad?.tecnica, "Tecnica")
+
+}
+
+
+@Composable
+fun imprimirHabilidad(
+    habilidad: Habilidad? = null,
+    name: String,
+    mejora: List<Mejora>? = null
+) {
+
+    val habilidadFinal = habilidad
+
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 10.dp, end = 10.dp)
+            .padding(vertical = 4.dp),
+        shape = RoundedCornerShape(8.dp) // Redondear cada tarjeta
+    ) {
+
+        Column {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                habilidadFinal?.nombre?.let {
+                    Text(
+                        text = "${name}: ${it}",
+                        modifier = Modifier.padding(16.dp),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.Black
+                    )
+                }
+            }
+
+            habilidadFinal?.descripcion?.let {
+                Text(
+                    text = it,
+                    modifier = Modifier.padding(16.dp),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.Black
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                habilidadFinal?.breakValue?.let {
+                    Text(
+                        text = "Break : " + it.toString(),
+                        modifier = Modifier.padding(16.dp),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.Black
+                    )
+                }
+
+                habilidadFinal?.coste?.let {
+                    Text(
+                        text = "Coste : " + it.toString(),
+                        modifier = Modifier.padding(16.dp),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.Black
+                    )
+                }
+
+                habilidadFinal?.gen_energia?.let {
+                    Text(
+                        text = "Gen_energia : " + it.toString(),
+                        modifier = Modifier.padding(16.dp),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.Black
+                    )
+                }
+            }
+
+            mejora?.forEach { mejora ->
+                Text(
+                    text = "Mejoras: ${mejora.nombre} - ${mejora.descripcion}",
+                    modifier = Modifier.padding(16.dp),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.Black
+                )
+            }
+        }
+
+
+        if (habilidadFinal?.atq_individual != "no aplica") {
+            habilidadFinal?.atq_individual?.let {
+                Text(
+                    text = "Daño:  " + it,
+                    modifier = Modifier.padding(16.dp),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.Black
+                )
+            }
+        } else {
+            habilidadFinal?.atq_aoe?.let {
+                Text(
+                    text = "Daño:  " + it,
+                    modifier = Modifier.padding(16.dp),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.Black
+                )
+            }
+        }
+
+
+    }
+
+
+}
+
+

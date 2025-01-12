@@ -7,7 +7,9 @@ import com.cursosandroidant.starrail.data.network.FirebaseDbInstance
 import com.cursosandroidant.starrail.domain.repositories.GetAllMaterialesImgRep
 import com.cursosandroidant.starrail.domain.repositories.GetAllMaterialesRep
 import com.cursosandroidant.starrail.domain.repositories.GetCharactersUsingMaterialRep
+import com.cursosandroidant.starrail.domain.repositories.GetOneMaterialesRep
 import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.toObject
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -75,3 +77,22 @@ class GetAllMaterialesImgImp : GetAllMaterialesImgRep {
     }
 
 }
+
+
+class GetOneMaterialesImp : GetOneMaterialesRep {
+    override suspend fun getOneMaterialesImp(name:String): Material {
+        var material = Material("","",0,"","",null,null)
+        val firebaseFirestore = FirebaseDbInstance.getInstance()
+        return withContext(Dispatchers.IO) {
+            try {
+                val documentSnapshot = firebaseFirestore.collection("materiales").document(name).get().await()
+
+                return@withContext documentSnapshot.toObject<Material>(Material::class.java)!!
+            } catch (e: FirebaseFirestoreException) {
+                e.printStackTrace()
+               return@withContext material
+            }
+        }
+    }
+}
+

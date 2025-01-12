@@ -6,8 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.cursosandroidant.starrail.data.model.Personaje
 import com.cursosandroidant.starrail.data.model.Post
 import com.cursosandroidant.starrail.domain.repositories.ApiService
+import com.cursosandroidant.starrail.domain.usecase.GetAllMaterialesImgUseCase
 import com.cursosandroidant.starrail.domain.usecase.GetAllPersonajesImgUseCase
 import com.cursosandroidant.starrail.domain.usecase.GetAllPersonajesUseCase
+import com.cursosandroidant.starrail.domain.usecase.GetOneMaterialesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -16,7 +18,8 @@ import retrofit2.Retrofit
 class PersonajeViewModel(
     private val personajesUseCase: GetAllPersonajesUseCase,
     private val getAllPersonajesImgUseCase: GetAllPersonajesImgUseCase,
-    private val retrofit: Retrofit
+    private val retrofit: Retrofit,
+    private val getAllMaterialesImgUseCase: GetAllMaterialesImgUseCase
 ) : ViewModel() {
 
 
@@ -43,15 +46,31 @@ class PersonajeViewModel(
                 _isLoading.value = true
                 try {
                     val personajes = personajesUseCase.getAllPersonajes()
-                    // Fetch images for each personaje
+
                     val personajesWithImages = personajes.map { personaje ->
+
                         val imageUrl = getAllPersonajesImgUseCase.getAllPersonajesImg(personaje.nombre)
-                        // Si imageUrl es null, no afecta a la lista resultante
+
+                        val ascensionWithMaterialsImages = personaje.ascension?.map { ascension ->
+                            ascension.copy(
+                                materials = ascension.materials?.map { material ->
+                                    material.copy(
+                                        material_img = getAllMaterialesImgUseCase.getAllMaterialesImg(material.id) ?: ""
+                                    )
+                                }
+                            )
+                        }
+
                         personaje.copy(
-                            imageUrl = imageUrl ?: ""
-                        ) // Maneja el caso en que imageUrl sea null
+                            imageUrl = imageUrl ?: "",
+                            ascension = ascensionWithMaterialsImages
+                        )
+
                     }
+
                     _personajeList.value = personajesWithImages
+                    Log.d("material","${personajesWithImages}")
+
                 } catch (e: Exception) {
                     Log.e("FetchError", "Error fetching personajes", e)
                     _personajeList.value = emptyList()
@@ -63,15 +82,14 @@ class PersonajeViewModel(
     }
 
 
-    private fun fetchRetrofit()
-    {
-         val apiService = retrofit.create(ApiService::class.java)
+    private fun fetchRetrofit() {
+        val apiService = retrofit.create(ApiService::class.java)
         viewModelScope.launch {
             try {
                 val posts = apiService.getPosts() // Esto ya es asíncrono gracias a `suspend`
                 retrofitList.value = posts
             } catch (e: Exception) {
-                Log.d("Error retrofit","error retrofit")
+                Log.d("Error retrofit", "error retrofit")
             }
         }
 

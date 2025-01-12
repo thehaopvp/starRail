@@ -14,3 +14,8 @@ interface GetAllMaterialesImgRep {
 interface GetCharactersUsingMaterialRep {
     suspend fun getCharactersUsingMaterialRepImp(name:String):List<Personaje>
 }
+
+interface GetOneMaterialesRep {
+    suspend fun getOneMaterialesImp(name:String):Material
+}
+

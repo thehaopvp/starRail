@@ -49,7 +49,7 @@ import com.cursosandroidant.starrail.ui.presentation.personaje.OneCharacterScree
 import com.google.gson.Gson
 import org.koin.androidx.compose.koinViewModel
 
-class OneMaterialScreen(private val materialJson: String) : Screen {
+class OneMaterialScreen(private val materialJson: String?=null,private val materialId: String?= null) : Screen {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
     override fun Content() {
@@ -58,14 +58,15 @@ class OneMaterialScreen(private val materialJson: String) : Screen {
 
         val viewModel: MaterialesViewModel = koinViewModel()
 
-
-
         val personajeList by viewModel.personajeLista.collectAsState()
+        val materialDetails by viewModel.personajeLista.collectAsState()
 
-        LaunchedEffect(material.nombre) {
+        LaunchedEffect(material.nombre,materialId) {
             viewModel.fetchPersonajesConMaterial(material.nombre)
+            materialId?.let {
+                viewModel.getMaterialDetailsById(it)
+            }
         }
-
 
 
 
@@ -73,7 +74,7 @@ class OneMaterialScreen(private val materialJson: String) : Screen {
             topBar = { /* Add your top bar here */ },
             content = { paddingValues ->
                 CurrencyScreen(
-                    material = material,
+                    material = material ?: materialDetails,
                     personajes = personajeList,
                     modifier = Modifier.padding(paddingValues)
                 )
@@ -86,137 +87,140 @@ class OneMaterialScreen(private val materialJson: String) : Screen {
 
     @Composable
     fun CurrencyScreen(
-        material: Material,
+        material: Any,
         personajes: List<Personaje>,
         modifier: Modifier = Modifier
     ) {
-        val starCount = material.estrella
-        val starText = "★".repeat(starCount)
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp), // Padding externo para que se vea el redondeo
-            contentPadding = PaddingValues(bottom = 80.dp) // Espacio extra en la parte inferior si se necesita
-        ) {
-            item {
-                // Tarjeta del material
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(350.dp),
-                    shape = RoundedCornerShape(16.dp),
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(16.dp)
-                    ) {
-                        Text(
-                            text = material.nombre,
-                            style = MaterialTheme.typography.bodyLarge.copy(
-                                fontSize = 24.sp,
-                                fontWeight = FontWeight.Bold
-                            ),
-                            color = Color.Black
-                        )
+        if (material is Material)
+        {
+            val starCount = material.estrella
+            val starText = "★".repeat(starCount)
 
-                        Divider(
-                            color = Color.Gray,
-                            thickness = 2.dp,
-                            modifier = Modifier.padding(vertical = 4.dp)
-                        )
-
-                        Text(
-                            text = material.descripcion,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = Color.Black
-                        )
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = starText,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = Color.Yellow,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Image(
-                                painter = rememberImagePainter(material.imageUrl),
-                                contentDescription = "Imagen de ${material.nombre}",
-                                modifier = Modifier
-                                    .size(100.dp)
-                                    .clip(CircleShape)
-                                    .background(Color.Gray),
-                                contentScale = ContentScale.Crop,
-                                alignment = Alignment.Center
-                            )
-                        }
-
-                        Divider(
-                            color = Color.Gray,
-                            thickness = 2.dp,
-                            modifier = Modifier.padding(vertical = 4.dp)
-                        )
-
-                        Text(
-                            text = material.curiosidad,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = Color.Black
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    text = "Formas de obtención",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                material.obtencion?.forEach { texto ->
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp), // Padding externo para que se vea el redondeo
+                contentPadding = PaddingValues(bottom = 80.dp) // Espacio extra en la parte inferior si se necesita
+            ) {
+                item {
+                    // Tarjeta del material
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 4.dp),
-                        shape = RoundedCornerShape(8.dp), // Redondear cada tarjeta
+                            .height(350.dp),
+                        shape = RoundedCornerShape(16.dp),
                     ) {
-                        Text(
-                            text = texto,
-                            modifier = Modifier.padding(16.dp),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = Color.Black
-                        )
-                    }
-                }
-            }
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(16.dp)
+                        ) {
+                            Text(
+                                text = material.nombre,
+                                style = MaterialTheme.typography.bodyLarge.copy(
+                                    fontSize = 24.sp,
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                color = Color.Black
+                            )
 
-            // Mostrar personajes solo si hay personajes disponibles
-            if (personajes.isNotEmpty()) {
-                item {
-                    Spacer(modifier = Modifier.height(20.dp))
+                            Divider(
+                                color = Color.Gray,
+                                thickness = 2.dp,
+                                modifier = Modifier.padding(vertical = 4.dp)
+                            )
+
+                            Text(
+                                text = material.descripcion,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Color.Black
+                            )
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = starText,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = Color.Yellow,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Image(
+                                    painter = rememberImagePainter(material.imageUrl),
+                                    contentDescription = "Imagen de ${material.nombre}",
+                                    modifier = Modifier
+                                        .size(100.dp)
+                                        .clip(CircleShape)
+                                        .background(Color.Gray),
+                                    contentScale = ContentScale.Crop,
+                                    alignment = Alignment.Center
+                                )
+                            }
+
+                            Divider(
+                                color = Color.Gray,
+                                thickness = 2.dp,
+                                modifier = Modifier.padding(vertical = 4.dp)
+                            )
+
+                            Text(
+                                text = material.curiosidad,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Color.Black
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     Text(
-                        text = "Personajes que lo utilizan ",
+                        text = "Formas de obtención",
                         style = MaterialTheme.typography.bodyLarge,
                         color = Color.White,
                         fontWeight = FontWeight.Bold
                     )
 
-                    personajes.forEach { item ->
-                        CharacterCard(item)
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    material.obtencion?.forEach { texto ->
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp),
+                            shape = RoundedCornerShape(8.dp), // Redondear cada tarjeta
+                        ) {
+                            Text(
+                                text = texto,
+                                modifier = Modifier.padding(16.dp),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Color.Black
+                            )
+                        }
+                    }
+                }
+
+                // Mostrar personajes solo si hay personajes disponibles
+                if (personajes.isNotEmpty()) {
+                    item {
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        Text(
+                            text = "Personajes que lo utilizan ",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        )
+
+                        personajes.forEach { item ->
+                            CharacterCard(item)
+                        }
                     }
                 }
             }
         }
-    }
-
+        }
 
 }
 

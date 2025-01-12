@@ -11,17 +11,20 @@ import com.cursosandroidant.starrail.domain.usecase.GetAllMaterialesImgUseCase
 import com.cursosandroidant.starrail.domain.usecase.GetAllMaterialesUseCase
 import com.cursosandroidant.starrail.domain.usecase.GetAllPersonajesImgUseCase
 import com.cursosandroidant.starrail.domain.usecase.GetCharactersUsingMaterialUseCase
+import com.cursosandroidant.starrail.domain.usecase.GetOneMaterialesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 import kotlinx.coroutines.launch
 
-class MaterialesViewModel(private val getAllMaterialesUseCase: GetAllMaterialesUseCase
-,private val getAllMaterialesImgUseCase: GetAllMaterialesImgUseCase,
+class MaterialesViewModel(
+    private val getAllMaterialesUseCase: GetAllMaterialesUseCase,
+    private val getAllMaterialesImgUseCase: GetAllMaterialesImgUseCase,
     private val getCharactersUsingMaterialUseCase: GetCharactersUsingMaterialUseCase,
-    private val getAllPersonajesImgUseCase: GetAllPersonajesImgUseCase
+    private val getAllPersonajesImgUseCase: GetAllPersonajesImgUseCase,
+    private val getOneMaterialesUseCase: GetOneMaterialesUseCase,
 
-): ViewModel() {
+    ) : ViewModel() {
     private val _materialesList = MutableStateFlow<List<Material>>(emptyList())
     val materialesLista: StateFlow<List<Material>> get() = _materialesList
 
@@ -31,8 +34,20 @@ class MaterialesViewModel(private val getAllMaterialesUseCase: GetAllMaterialesU
     private val _isLoading = MutableLiveData<Boolean>(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
 
+    private val _materialDetails = MutableStateFlow<Material?>(Material())
+    val materialDetails: StateFlow<Material?> = _materialDetails
+
     init {
         fetchAllMateriales()
+    }
+
+
+
+    fun getMaterialDetailsById(id: String) {
+        viewModelScope.launch {
+            _materialDetails.value = getOneMaterialesUseCase.getOneMateriales(id)
+        }
+
     }
 
     private fun fetchAllMateriales() {
@@ -44,9 +59,12 @@ class MaterialesViewModel(private val getAllMaterialesUseCase: GetAllMaterialesU
                     val materiales = getAllMaterialesUseCase.getAllMateriales()
 
                     val materialesWithImages = materiales.map { material ->
-                        val imageUrl = getAllMaterialesImgUseCase.getAllMaterialesImg(material.nombre)
+                        val imageUrl =
+                            getAllMaterialesImgUseCase.getAllMaterialesImg(material.nombre)
                         // Si imageUrl es null, no afecta a la lista resultante
-                        material.copy(imageUrl = imageUrl ?: "") // Maneja el caso en que imageUrl sea null
+                        material.copy(
+                            imageUrl = imageUrl ?: ""
+                        ) // Maneja el caso en que imageUrl sea null
                     }
                     _materialesList.value = materialesWithImages
                 } catch (e: Exception) {
@@ -66,12 +84,16 @@ class MaterialesViewModel(private val getAllMaterialesUseCase: GetAllMaterialesU
                 _isLoading.value = true
                 try {
 
-                    val personajes = getCharactersUsingMaterialUseCase.getAllMaterialesImg(materialId)
+                    val personajes =
+                        getCharactersUsingMaterialUseCase.getAllMaterialesImg(materialId)
                     // Fetch images for each personaje
                     val personajesWithImages = personajes.map { personaje ->
-                        val imageUrl = getAllPersonajesImgUseCase.getAllPersonajesImg(personaje.nombre)
+                        val imageUrl =
+                            getAllPersonajesImgUseCase.getAllPersonajesImg(personaje.nombre)
                         // Si imageUrl es null, no afecta a la lista resultante
-                        personaje.copy(imageUrl = imageUrl ?: "") // Maneja el caso en que imageUrl sea null
+                        personaje.copy(
+                            imageUrl = imageUrl ?: ""
+                        ) // Maneja el caso en que imageUrl sea null
                     }
                     _personajeList.value = personajes
                 } catch (e: Exception) {
@@ -83,8 +105,6 @@ class MaterialesViewModel(private val getAllMaterialesUseCase: GetAllMaterialesU
             }
         }
     }
-
-
 
 
 //    private suspend fun getPersonajesUsandoMaterial(materialId: String): List<Personaje>  {
